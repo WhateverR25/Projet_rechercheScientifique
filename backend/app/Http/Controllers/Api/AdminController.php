@@ -163,6 +163,26 @@ class AdminController extends Controller
         return response()->json($categories);
     }
 
+    public function userCategories(): JsonResponse
+    {
+        $categories = Category::whereNotNull('user_id')
+            ->with('user:id,name,email')
+            ->orderBy('user_id')
+            ->get();
+        return response()->json($categories);
+    }
+
+    public function deleteUserCategory(Category $category): JsonResponse
+    {
+        abort_unless($category->user_id !== null, 403);
+        $categoryName = $category->name;
+        $category->delete();
+
+        $this->logAction('USER_CATEGORY_DELETED', "Suppression de la catégorie utilisateur : {$categoryName}");
+
+        return response()->json(null, 204);
+    }
+
     public function createCategory(Request $request): JsonResponse
     {
         $validated = $request->validate([

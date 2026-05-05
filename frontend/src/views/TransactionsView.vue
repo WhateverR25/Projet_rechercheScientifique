@@ -26,9 +26,16 @@ const catForm = ref({ name: '', type: 'expense', color: '#3b82f6', icon: '❓' }
 const catError = ref('')
 const formError = ref('')
 const showSuccess = ref(false)
+const txToDelete = ref(null)
 
 // Emoji options for category icons
 const emojiOptions = ['🛒','💰','🏠','🚗','🍔','💊','🎮','📚','✈️','👕','🎁','💡','📱','🎬','⚽','🏥','💳','🎵','🐾','👶','💼','🔧','🎨','🌿','☕','🍕','🎂','📦','🚌','⛽','🏦','💸','📊','🎓','💎','🧾','🏋️','💇','🎪','🌍']
+
+const emojiColors = [
+  '#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6',
+  '#ec4899','#14b8a6','#f97316','#6366f1','#84cc16',
+  '#06b6d4','#e11d48'
+]
 
 // Sorting & Filtering
 const sortKey = ref('date')
@@ -144,8 +151,14 @@ const onTypeChange = (newType) => {
   }
 }
 
-const deleteTransaction = async (tx) => {
-  if (!confirm('Are you sure you want to delete this transaction?')) return
+const deleteTransaction = (tx) => {
+  txToDelete.value = tx
+}
+
+const confirmDeleteTransaction = async () => {
+  if (!txToDelete.value) return
+  const tx = txToDelete.value
+  txToDelete.value = null
   const endpoint = tx._type === 'income' ? `/incomes/${tx.id}` : `/expenses/${tx.id}`
   await api.delete(endpoint)
   await loadAll()
@@ -156,6 +169,14 @@ const isDuplicateName = computed(() => {
   return categories.value.some(c => 
     c.name.toLowerCase() === catForm.value.name.trim().toLowerCase() && 
     (c.type === catForm.value.type || c.type === 'both') &&
+    c.id !== catEditingId.value
+  )
+})
+
+const isDuplicateColor = computed(() => {
+  if (!catForm.value.color) return false
+  return categories.value.some(c =>
+    c.color && c.color.toLowerCase() === catForm.value.color.toLowerCase() &&
     c.id !== catEditingId.value
   )
 })
@@ -191,10 +212,7 @@ const addCategory = async () => {
     return
   }
   
-  if (isDuplicateName.value) {
-    catError.value = t('categoryExists') || 'Une catégorie portant ce nom existe déjà.'
-    return
-  }
+  if (isDuplicateName.value || isDuplicateColor.value) return
 
   try {
     if (catEditingId.value) {
@@ -496,20 +514,47 @@ onMounted(async () => {
           <!-- Color -->
           <div class="form-group">
             <label>{{ t('color') }}</label>
-            <div class="color-picker-wrapper">
-              <input v-model="catForm.color" type="color" class="color-input" />
-              <span class="color-hex">{{ catForm.color }}</span>
+            <div class="preset-colors-user">
+              <button
+                type="button"
+                v-for="color in emojiColors"
+                :key="color"
+                class="color-dot-user"
+                :class="{ selected: catForm.color === color }"
+                :style="{ backgroundColor: color }"
+                @click="catForm.color = color"
+              ></button>
             </div>
+            <p v-if="isDuplicateColor" class="inline-error">Cette couleur est déjà utilisée par une de vos catégories. Veuillez en choisir une différente.</p>
           </div>
           
           <p v-if="catError" class="error-text">{{ catError }}</p>
           
           <div class="modal-actions">
-            <button type="submit" class="btn-save-monarch" :disabled="isDuplicateName">{{ t('save') }}</button>
+            <button type="submit" class="btn-save-monarch" :disabled="isDuplicateName || isDuplicateColor">{{ t('save') }}</button>
           </div>
         </form>
       </div>
     </div>
+
+    <!-- Confirm Delete Transaction Modal -->
+    <transition name="panel-float">
+      <div v-if="txToDelete" class="modal-overlay" @click.self="txToDelete = null">
+        <div class="modal-content confirm-modal" style="width: min(320px, 90%); text-align: center;">
+          <div class="modal-body" style="align-items: center; padding: 32px 24px;">
+            <div style="width: 48px; height: 48px; background: #fef2f2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </div>
+            <h3 style="font-size: 1.15rem; color: #111827; margin-bottom: 8px;">Supprimer cette transaction ?</h3>
+            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 24px;">{{ txToDelete?.description }}</p>
+            <div style="display: flex; gap: 12px; width: 100%;">
+              <button type="button" style="flex: 1; padding: 10px; background: #f3f4f6; color: #4b5563; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" @click="txToDelete = null">Annuler</button>
+              <button type="button" style="flex: 1; padding: 10px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" @click="confirmDeleteTransaction">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
 
     <!-- Confirm Delete Category Modal -->
     <transition name="panel-float">
@@ -1485,6 +1530,34 @@ onMounted(async () => {
 .close-btn:hover {
   color: #111827;
   background: #f3f4f6;
+}
+
+.preset-colors-user {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.color-dot-user {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  outline: none;
+  padding: 0;
+}
+
+.color-dot-user:hover {
+  transform: scale(1.15);
+}
+
+.color-dot-user.selected {
+  border-color: white;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.35);
+  transform: scale(1.1);
 }
 
 @media (max-width: 1024px) {

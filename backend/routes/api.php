@@ -50,6 +50,9 @@ Route::prefix('admin')->group(function () {
         Route::post('categories', [AdminController::class, 'createCategory']);
         Route::patch('categories/{category}', [AdminController::class, 'updateCategory']);
         Route::delete('categories/{category}', [AdminController::class, 'deleteCategory']);
+
+        Route::get('user-categories', [AdminController::class, 'userCategories']);
+        Route::delete('user-categories/{category}', [AdminController::class, 'deleteUserCategory']);
         
         Route::get('logs', [AdminController::class, 'logs']);
         

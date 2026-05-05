@@ -34,6 +34,7 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'in:income,expense,both'],
             'color' => ['nullable', 'string', 'max:20'],
+            'icon' => ['nullable', 'string', 'max:10'],
         ]);
 
         $category = auth('api')->user()->categories()->create($validated);
@@ -64,6 +65,7 @@ class CategoryController extends Controller
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'type' => ['sometimes', 'required', 'in:income,expense,both'],
             'color' => ['nullable', 'string', 'max:20'],
+            'icon' => ['nullable', 'string', 'max:10'],
         ]);
 
         $category->update($validated);
