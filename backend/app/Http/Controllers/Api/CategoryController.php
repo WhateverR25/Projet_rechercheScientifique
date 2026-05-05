@@ -14,7 +14,15 @@ class CategoryController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(auth('api')->user()->categories()->latest()->get());
+        $userId = auth('api')->id();
+
+        // Get both system default categories (user_id IS NULL) and user's own categories
+        $categories = Category::where(function ($query) use ($userId) {
+            $query->whereNull('user_id')
+                  ->orWhere('user_id', $userId);
+        })->latest()->get();
+
+        return response()->json($categories);
     }
 
     /**
@@ -38,7 +46,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category): JsonResponse
     {
-        abort_unless($category->user_id === auth('api')->id(), 403);
+        // Allow viewing system default categories (user_id IS NULL) or own categories
+        abort_unless($category->user_id === null || $category->user_id === auth('api')->id(), 403);
 
         return response()->json($category);
     }
@@ -48,7 +57,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category): JsonResponse
     {
-        abort_unless($category->user_id === auth('api')->id(), 403);
+        // Only allow editing own categories, not system defaults
+        abort_unless($category->user_id !== null && $category->user_id === auth('api')->id(), 403);
 
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
@@ -66,7 +76,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
-        abort_unless($category->user_id === auth('api')->id(), 403);
+        // Only allow deleting own categories, not system defaults
+        abort_unless($category->user_id !== null && $category->user_id === auth('api')->id(), 403);
         $category->delete();
 
         return response()->json([], 204);

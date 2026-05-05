@@ -30,7 +30,10 @@ class IncomeController extends Controller
                 'nullable',
                 'integer',
                 Rule::exists('categories', 'id')->where(fn ($query) => $query
-                    ->where('user_id', $user->id)
+                    ->where(function ($q) use ($user) {
+                        $q->whereNull('user_id')
+                          ->orWhere('user_id', $user->id);
+                    })
                     ->whereIn('type', ['income', 'both'])),
             ],
             'amount' => ['required', 'numeric', 'min:0'],
@@ -66,7 +69,10 @@ class IncomeController extends Controller
                 'nullable',
                 'integer',
                 Rule::exists('categories', 'id')->where(fn ($query) => $query
-                    ->where('user_id', $user->id)
+                    ->where(function ($q) use ($user) {
+                        $q->whereNull('user_id')
+                          ->orWhere('user_id', $user->id);
+                    })
                     ->whereIn('type', ['income', 'both'])),
             ],
             'amount' => ['sometimes', 'required', 'numeric', 'min:0'],

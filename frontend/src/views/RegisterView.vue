@@ -52,14 +52,13 @@ const submit = async () => {
       <div class="register-form-container">
         <!-- Logo -->
         <div class="register-logo">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="#6f4ef2"/>
-            <path d="M8 16h4l3-6 5 12 3-6h4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>{{ t('appName') }}</span>
+          <router-link to="/">
+            <img src="/aurem-logo.png" alt="Aurem" class="register-logo-img" />
+          </router-link>
         </div>
 
         <h2 class="register-title">{{ t('register') }}</h2>
+        <p class="register-subtitle">Create your account to start tracking.</p>
 
         <form @submit.prevent="submit" class="register-form" id="register-form">
           <div class="form-group">
@@ -149,7 +148,7 @@ const submit = async () => {
 
           <button type="submit" class="register-submit" :disabled="loading" id="register-submit-btn">
             <span v-if="loading" class="spinner"></span>
-            <span v-else>Sign up with email</span>
+            <span v-else>Create account</span>
           </button>
         </form>
 
@@ -165,7 +164,7 @@ const submit = async () => {
       <div class="showcase-content">
         <!-- Stars -->
         <div class="stars">
-          <svg v-for="n in 5" :key="n" width="24" height="24" viewBox="0 0 24 24" fill="#f5a574">
+          <svg v-for="n in 5" :key="n" width="22" height="22" viewBox="0 0 24 24" fill="#bfa167">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
         </div>
@@ -183,15 +182,15 @@ const submit = async () => {
             <div class="browser-dots">
               <span></span><span></span><span></span>
             </div>
-            <img :src="dashboardPreview" alt="BudgetWise Dashboard Preview" class="preview-image" />
+            <img :src="dashboardPreview" alt="Aurem Dashboard Preview" class="preview-image" />
           </div>
         </div>
 
         <!-- Features -->
         <div class="feature-pills">
-          <span class="pill">📊 Smart Reports</span>
-          <span class="pill">🎯 Budget Goals</span>
-          <span class="pill">🌍 Multi-language</span>
+          <span class="pill"><img src="../assets/icon2.png" alt="" class="pill-icon" /> Smart Reports</span>
+          <span class="pill"><img src="../assets/icon3.png" alt="" class="pill-icon" /> Budget Goals</span>
+          <span class="pill"><img src="../assets/icon1.png" alt="" class="pill-icon" /> Multi-language</span>
         </div>
       </div>
     </section>
@@ -203,7 +202,7 @@ const submit = async () => {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: #faf8f5;
+  background: linear-gradient(165deg, #faf9f7 0%, #f3f1ed 50%, #eae7e0 100%);
 }
 
 /* ─── LEFT: Form ─── */
@@ -211,73 +210,85 @@ const submit = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 48px 40px;
 }
 
 .register-form-container {
-  width: min(400px, 100%);
+  width: min(420px, 100%);
 }
 
 .register-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 32px;
+  justify-content: center;
+  margin-bottom: 36px;
 }
 
-.register-logo span {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #6f4ef2;
-  letter-spacing: -0.3px;
+.register-logo-img {
+  height: 130px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
 }
 
 .register-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a2e;
-  margin-bottom: 28px;
+  color: #0f172a;
+  letter-spacing: -0.4px;
+  margin-bottom: 6px;
+}
+
+.register-subtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 400;
+  margin-bottom: 32px;
+  letter-spacing: -0.1px;
 }
 
 /* ─── Form ─── */
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .form-group label {
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #334155;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
 }
 
 .form-group input {
   width: 100%;
-  border: 1.5px solid #e2e0dc;
-  border-radius: 10px;
-  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 13px 16px;
   font-size: 0.95rem;
   font-family: inherit;
-  color: #1a1a2e;
-  background: white;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  color: #0f172a;
+  background: #f8fafc;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .form-group input::placeholder {
-  color: #b0aca6;
+  color: #94a3b8;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #6f4ef2;
-  box-shadow: 0 0 0 3px rgba(111, 78, 242, 0.1);
+  border-color: #1a1a2e;
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+  background: white;
 }
 
 /* ─── Password ─── */
@@ -291,13 +302,13 @@ const submit = async () => {
 
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   padding: 4px;
-  color: #9b978f;
+  color: #94a3b8;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -307,7 +318,7 @@ const submit = async () => {
 }
 
 .toggle-password:hover {
-  color: #6f4ef2;
+  color: #0f172a;
   background: none;
 }
 
@@ -317,9 +328,9 @@ const submit = async () => {
   align-items: center;
   gap: 8px;
   padding: 12px 14px;
-  background: #fff5f5;
+  background: #fef2f2;
   border: 1px solid #fecaca;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 0.85rem;
   color: #dc2626;
   font-weight: 500;
@@ -328,30 +339,50 @@ const submit = async () => {
 /* ─── Submit ─── */
 .register-submit {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #f5a574, #ef8c5e);
+  border-radius: 12px;
+  background: #0f172a;
   color: white;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-  margin-top: 4px;
+  letter-spacing: 0.3px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(191, 161, 103, 0.15), rgba(191, 161, 103, 0));
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .register-submit:hover:not(:disabled) {
+  background: #1e293b;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(239, 140, 94, 0.35);
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.2),
+    0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.register-submit:hover:not(:disabled)::after {
+  opacity: 1;
 }
 
 .register-submit:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
 }
 
 .register-submit:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -360,7 +391,7 @@ const submit = async () => {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2.5px solid rgba(255,255,255,0.3);
+  border: 2.5px solid rgba(255,255,255,0.25);
   border-top-color: white;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -373,21 +404,23 @@ const submit = async () => {
 /* ─── Footer ─── */
 .register-footer-text {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: 0.9rem;
-  color: #6b7280;
+  color: #64748b;
 }
 
 .register-link {
-  color: #6f4ef2;
+  color: #0f172a;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 1px;
 }
 
 .register-link:hover {
-  color: #5a3dd6;
-  text-decoration: underline;
+  color: #bfa167;
+  border-bottom-color: #bfa167;
 }
 
 /* ─── RIGHT: Showcase ─── */
@@ -395,17 +428,31 @@ const submit = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  background: white;
-  border-left: 1px solid #f0ece6;
+  padding: 48px 40px;
+  background: #0f172a;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-right::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 80%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(191, 161, 103, 0.08), transparent 70%);
+  pointer-events: none;
 }
 
 .showcase-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   max-width: 480px;
+  position: relative;
+  z-index: 1;
 }
 
 /* ─── Stars ─── */
@@ -416,19 +463,20 @@ const submit = async () => {
 
 /* ─── Testimonial ─── */
 .testimonial-quote {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 500;
-  color: #1a1a2e;
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.7;
   border: none;
   padding: 0;
   margin: 0;
+  letter-spacing: -0.1px;
 }
 
 .testimonial-author {
-  font-size: 0.95rem;
-  color: #9b978f;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
   font-style: italic;
   font-weight: 500;
 }
@@ -440,20 +488,20 @@ const submit = async () => {
 }
 
 .preview-browser {
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   box-shadow:
-    0 4px 12px rgba(0,0,0,0.06),
-    0 20px 40px rgba(0,0,0,0.1);
-  border: 1px solid #e8e5e0;
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 24px 48px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .browser-dots {
   display: flex;
   gap: 6px;
   padding: 10px 14px;
-  background: #f6f4f0;
-  border-bottom: 1px solid #e8e5e0;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .browser-dots span {
@@ -481,13 +529,23 @@ const submit = async () => {
 }
 
 .pill {
-  background: #f6f4f0;
-  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #4b5563;
-  border: 1px solid #e8e5e0;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.pill-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 /* ─── Responsive ─── */
@@ -508,6 +566,10 @@ const submit = async () => {
 @media (max-width: 480px) {
   .register-form-container {
     width: 100%;
+  }
+
+  .register-logo-img {
+    height: 100px;
   }
 }
 </style>
