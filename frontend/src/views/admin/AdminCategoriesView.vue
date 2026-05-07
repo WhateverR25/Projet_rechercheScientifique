@@ -104,20 +104,32 @@ const confirmDelete = (cat) => {
 const deleteCategory = async () => {
   if (!catToDelete.value) return
   const name = catToDelete.value.name
+  const categoryId = catToDelete.value.id
+  console.log('Deleting category:', { name, categoryId })
   try {
-    await api.delete(`/admin/categories/${catToDelete.value.id}`)
+    await api.delete(`/admin/categories/${categoryId}`)
     catToDelete.value = null
     await fetchCategories()
     showToast(`Catégorie « ${name} » supprimée.`, 'success')
   } catch (err) {
     console.error('Failed to delete category:', err)
+    console.error('Error response:', err?.response?.data)
     showToast('Échec de la suppression de la catégorie.', 'error')
   }
 }
 
 const submitForm = async () => {
-  if (!canSubmit.value) return
+  if (!canSubmit.value) {
+    console.log('Cannot submit form:', { 
+      canSubmit: canSubmit.value, 
+      formData: formData.value,
+      isDuplicateName: isDuplicateName.value,
+      isDuplicateColor: isDuplicateColor.value
+    })
+    return
+  }
   try {
+    console.log('Submitting form:', formData.value)
     if (formData.value.id) {
       await api.patch(`/admin/categories/${formData.value.id}`, formData.value)
       showToast(`Catégorie « ${formData.value.name} » modifiée.`, 'success')
@@ -128,8 +140,11 @@ const submitForm = async () => {
     showModal.value = false
     showEmojiPicker.value = false
     await fetchCategories()
+    // Reset form after successful submission
+    formData.value = { id: null, name: '', type: 'expense', icon: '📝', color: null }
   } catch (err) {
-    console.error(err)
+    console.error('Failed to submit category:', err)
+    console.error('Error response:', err?.response?.data)
     showToast(err?.response?.data?.message || 'Échec de création de catégorie.', 'error')
   }
 }
@@ -294,7 +309,7 @@ const deleteUserCategory = async () => {
           <div class="form-group">
             <label>{{ t('name') }}</label>
             <div class="icon-name-row" :class="{ 'input-error': isDuplicateName }">
-              <div class="emoji-trigger" @click.stop="showEmojiPicker = !showEmojiPicker" :style="{ backgroundColor: formData.color + '25', color: formData.color }">
+              <div class="emoji-trigger" @click.stop="showEmojiPicker = !showEmojiPicker" :style="{ backgroundColor: formData.color ? formData.color + '25' : '#f3f4f6', color: formData.color || '#6b7280' }">
                 {{ formData.icon }}
               </div>
               <input v-model="formData.name" required placeholder="Nom de la catégorie" class="name-input-inline" />
