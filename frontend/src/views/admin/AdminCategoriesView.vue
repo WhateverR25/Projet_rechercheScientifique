@@ -110,7 +110,7 @@ const deleteCategory = async () => {
     await fetchCategories()
     showToast(`Catégorie « ${name} » supprimée.`, 'success')
   } catch (err) {
-    console.error(err)
+    console.error('Failed to delete category:', err)
     showToast('Échec de la suppression de la catégorie.', 'error')
   }
 }
@@ -159,7 +159,7 @@ const deleteUserCategory = async () => {
     await fetchUserCategories()
     showToast(`Catégorie utilisateur « ${name} » supprimée.`, 'success')
   } catch (err) {
-    console.error(err)
+    console.error('Failed to delete user category:', err)
     showToast('Échec de la suppression.', 'error')
   }
 }

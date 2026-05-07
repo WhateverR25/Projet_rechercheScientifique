@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\IncomeController;
-use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AdminAuthController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +25,6 @@ Route::middleware([\App\Http\Middleware\CheckMaintenanceMode::class])->group(fun
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('incomes', IncomeController::class);
         Route::apiResource('expenses', ExpenseController::class);
-        Route::apiResource('transactions', TransactionController::class);
     });
 });
 

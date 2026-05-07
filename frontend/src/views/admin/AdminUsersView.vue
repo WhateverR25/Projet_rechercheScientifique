@@ -61,7 +61,8 @@ const executeDelete = async () => {
     showModal.value = false
     fetchUsers(pagination.value.current)
   } catch (err) {
-    console.error(err)
+    console.error('Failed to delete user:', err)
+    alert('Failed to delete user. Please try again.')
   }
 }
 

@@ -162,9 +162,15 @@ const confirmDeleteTransaction = async () => {
   if (!txToDelete.value) return
   const tx = txToDelete.value
   txToDelete.value = null
-  const endpoint = tx._type === 'income' ? `/incomes/${tx.id}` : `/expenses/${tx.id}`
-  await api.delete(endpoint)
-  await loadAll()
+  try {
+    const endpoint = tx._type === 'income' ? `/incomes/${tx.id}` : `/expenses/${tx.id}`
+    await api.delete(endpoint)
+    await loadAll()
+  } catch (err) {
+    console.error('Failed to delete transaction:', err)
+    // Optionally show error message to user
+    alert('Failed to delete transaction. Please try again.')
+  }
 }
 
 const isDuplicateName = computed(() => {
@@ -212,7 +218,8 @@ const deleteCategory = async () => {
     catToDelete.value = null
     await loadAll()
   } catch (err) {
-    console.error(err)
+    console.error('Failed to delete category:', err)
+    alert('Failed to delete category. Please try again.')
   }
 }
 
