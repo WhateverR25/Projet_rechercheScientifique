@@ -33,6 +33,7 @@ class SystemDefaultCategoriesSeeder extends Seeder
         foreach ($defaultCategories as $category) {
             DB::table('categories')->insert(array_merge($category, [
                 'user_id' => null,
+                'is_system_default' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]));

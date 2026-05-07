@@ -166,6 +166,7 @@ class AdminController extends Controller
     public function userCategories(): JsonResponse
     {
         $categories = Category::whereNotNull('user_id')
+            ->where('is_system_default', false)
             ->with('user:id,name,email')
             ->orderBy('user_id')
             ->get();

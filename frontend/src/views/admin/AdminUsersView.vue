@@ -129,15 +129,6 @@ const getInitials = (name) => {
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
               </button>
-              <button @click="toggleStatus(user)" class="btn-action" :title="user.status === 'active' ? 'Désactiver' : 'Réactiver'">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" v-if="user.status === 'active'">
-                  <rect x="6" y="4" width="4" height="16"/>
-                  <rect x="14" y="4" width="4" height="16"/>
-                </svg>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" v-else>
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-              </button>
               <button @click="confirmDelete(user)" class="btn-action btn-danger" title="Supprimer">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                   <polyline points="3 6 5 6 21 6"/>

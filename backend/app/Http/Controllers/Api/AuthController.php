@@ -33,6 +33,7 @@ class AuthController extends Controller
                 'type' => $category->type,
                 'icon' => $category->icon,
                 'color' => $category->color,
+                'is_system_default' => true,
             ]);
         }
 

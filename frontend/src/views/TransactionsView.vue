@@ -496,10 +496,10 @@ onMounted(async () => {
           <div class="form-group">
             <label>Icône & Nom</label>
             <div class="icon-name-row" :class="{ 'input-error': isDuplicateName }">
-              <div class="emoji-trigger" @click.stop="showEmojiPicker = !showEmojiPicker" :style="{ backgroundColor: catForm.color + '25', color: catForm.color }">
+              <div class="emoji-trigger" @click.stop="showEmojiPicker = !showEmojiPicker" :style="{ backgroundColor: catForm.color ? catForm.color + '25' : '#f3f4f6', color: catForm.color || '#6b7280' }">
                 {{ catForm.icon }}
               </div>
-              <input v-model="catForm.name" required placeholder="Nouvelle catégorie" class="name-input-inline" />
+              <input v-model="catForm.name" required placeholder="" class="name-input-inline" />
             </div>
             <p v-if="isDuplicateName" class="inline-error">Une catégorie portant ce nom existe déjà.</p>
             <!-- Emoji Picker -->
