@@ -24,7 +24,10 @@ const emojiOptions = ['🛒','💰','🏠','🚗','🍔','💊','🎮','📚','�
 const presetColors = [
   '#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6',
   '#ec4899','#14b8a6','#f97316','#6366f1','#84cc16',
-  '#06b6d4','#e11d48'
+  '#06b6d4','#e11d48','#a855f7','#f43f5e','#0ea5e9',
+  '#22c55e','#fbbf24','#fb923c','#c084fc','#f472b6',
+  '#2dd4bf','#facc15','#f87171','#a78bfa','#60a5fa',
+  '#34d399','#fde047','#fca5a5','#e879f9','#93c5fd'
 ]
 
 const showToast = (message, type = 'success') => {
@@ -73,6 +76,7 @@ const isDuplicateName = computed(() => {
 })
 
 const isDuplicateColor = computed(() => {
+  if (!formData.value.color) return false
   return categories.value.some(c =>
     c.color && c.color.toLowerCase() === formData.value.color.toLowerCase() &&
     c.id !== formData.value.id
@@ -82,7 +86,7 @@ const isDuplicateColor = computed(() => {
 const canSubmit = computed(() => !isDuplicateName.value && !isDuplicateColor.value && formData.value.name.trim())
 
 const openCreateModal = () => {
-  formData.value = { id: null, name: '', type: 'expense', icon: '📝', color: '#10b981' }
+  formData.value = { id: null, name: '', type: 'expense', icon: '📝', color: null }
   showEmojiPicker.value = false
   showModal.value = true
 }

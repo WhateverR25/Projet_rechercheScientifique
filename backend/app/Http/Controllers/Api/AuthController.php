@@ -24,24 +24,16 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        $defaultCategories = [
-            ['name' => 'Alimentation', 'type' => 'expense', 'icon' => '🍔', 'color' => '#10b981'],
-            ['name' => 'Transport', 'type' => 'expense', 'icon' => '🚗', 'color' => '#3b82f6'],
-            ['name' => 'Logement', 'type' => 'expense', 'icon' => '🏠', 'color' => '#8b5cf6'],
-            ['name' => 'Santé', 'type' => 'expense', 'icon' => '💊', 'color' => '#f43f5e'],
-            ['name' => 'Loisirs', 'type' => 'expense', 'icon' => '🎮', 'color' => '#f59e0b'],
-            ['name' => 'Vêtements', 'type' => 'expense', 'icon' => '👕', 'color' => '#ec4899'],
-            ['name' => 'Éducation', 'type' => 'expense', 'icon' => '📚', 'color' => '#06b6d4'],
-            ['name' => 'Abonnements', 'type' => 'expense', 'icon' => '📱', 'color' => '#14b8a6'],
-            ['name' => 'Restaurant', 'type' => 'expense', 'icon' => '🍽️', 'color' => '#f97316'],
-            ['name' => 'Salaire', 'type' => 'income', 'icon' => '💼', 'color' => '#10b981'],
-            ['name' => 'Freelance', 'type' => 'income', 'icon' => '💻', 'color' => '#3b82f6'],
-            ['name' => 'Investissements', 'type' => 'income', 'icon' => '📈', 'color' => '#8b5cf6'],
-            ['name' => 'Autre revenu', 'type' => 'income', 'icon' => '🎁', 'color' => '#f59e0b'],
-        ];
-
-        foreach ($defaultCategories as $cat) {
-            $user->categories()->create($cat);
+        // Copy system default categories to user
+        $systemCategories = \App\Models\Category::whereNull('user_id')->get();
+        
+        foreach ($systemCategories as $category) {
+            $user->categories()->create([
+                'name' => $category->name,
+                'type' => $category->type,
+                'icon' => $category->icon,
+                'color' => $category->color,
+            ]);
         }
 
         $token = auth('api')->login($user);

@@ -34,7 +34,10 @@ const emojiOptions = ['🛒','💰','🏠','🚗','🍔','💊','🎮','📚','�
 const emojiColors = [
   '#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6',
   '#ec4899','#14b8a6','#f97316','#6366f1','#84cc16',
-  '#06b6d4','#e11d48'
+  '#06b6d4','#e11d48','#a855f7','#f43f5e','#0ea5e9',
+  '#22c55e','#fbbf24','#fb923c','#c084fc','#f472b6',
+  '#2dd4bf','#facc15','#f87171','#a78bfa','#60a5fa',
+  '#34d399','#fde047','#fca5a5','#e879f9','#93c5fd'
 ]
 
 // Sorting & Filtering
@@ -184,6 +187,14 @@ const isDuplicateColor = computed(() => {
 const startEditCat = (cat) => {
   catForm.value = { name: cat.name, type: cat.type, color: cat.color, icon: cat.icon }
   catEditingId.value = cat.id
+  catError.value = ''
+  isModalOpen.value = true
+  isCatPanelOpen.value = false
+}
+
+const openCreateCatModal = () => {
+  catForm.value = { name: '', type: 'expense', color: null, icon: '❓' }
+  catEditingId.value = null
   catError.value = ''
   isModalOpen.value = true
   isCatPanelOpen.value = false
@@ -372,7 +383,7 @@ onMounted(async () => {
                       </div>
                     </div>
 
-                    <div class="side-panel-footer" @click="isCatPanelOpen = false; isModalOpen = true">
+                    <div class="side-panel-footer" @click="openCreateCatModal">
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                       Créer une nouvelle catégorie
                     </div>
