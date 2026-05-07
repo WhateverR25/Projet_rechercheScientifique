@@ -83,7 +83,7 @@ const isDuplicateColor = computed(() => {
   )
 })
 
-const canSubmit = computed(() => !isDuplicateName.value && !isDuplicateColor.value && formData.value.name.trim())
+const canSubmit = computed(() => !isDuplicateName.value && !isDuplicateColor.value && formData.value.name.trim() && formData.value.color)
 
 const openCreateModal = () => {
   formData.value = { id: null, name: '', type: 'expense', icon: '📝', color: null }

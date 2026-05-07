@@ -22,7 +22,7 @@ const catToDelete = ref(null)
 
 // Form states
 const form = ref({ amount: '', description: '', date: new Date().toISOString().split('T')[0], category_id: '' })
-const catForm = ref({ name: '', type: 'expense', color: '#3b82f6', icon: '❓' })
+const catForm = ref({ name: '', type: 'expense', color: null, icon: '❓' })
 const catError = ref('')
 const formError = ref('')
 const showSuccess = ref(false)
@@ -231,7 +231,7 @@ const addCategory = async () => {
     } else {
       await api.post(`/categories`, catForm.value)
     }
-    catForm.value = { name: '', type: 'expense', color: '#3b82f6', icon: '❓' }
+    catForm.value = { name: '', type: 'expense', color: null, icon: '❓' }
     catEditingId.value = null
     isModalOpen.value = false
     showEmojiPicker.value = false
